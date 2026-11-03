@@ -124,13 +124,9 @@ export default defineNuxtConfig({
   },
 
   nitro: {
-    nodeServer: {
-      bundled: true
-    },
     externals: {
       inline: ['xlsx'],
-      external: ['better-sqlite3'],
-      trace: false
+      external: ['better-sqlite3']
     },
 
     serverAssets: [
