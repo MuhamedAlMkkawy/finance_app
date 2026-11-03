@@ -1,0 +1,53 @@
+@use "./variables" as *;
+@use "generic";
+@use "form";
+@use "main-btn";
+@use "popup";
+
+.page {
+  max-width: 100%;
+  width: 100%;
+  margin-inline: auto;
+  padding-inline: clamp(14px, 2.5vw, 20px);
+}
+
+/* sm */
+@media (min-width: 576px) {
+  .page {
+    max-width: 540px;
+  }
+}
+
+/* md */
+@media (min-width: 768px) {
+  .page {
+    max-width: 720px;
+  }
+}
+
+/* lg */
+@media (min-width: 992px) {
+  .page {
+    max-width: 960px;
+  }
+}
+
+/* xl */
+@media (min-width: 1200px) {
+  .page {
+    max-width: 1140px;
+  }
+}
+
+/* xxl */
+@media (min-width: 1500px) {
+  .page {
+    max-width: 95%;
+  }
+}
+
+
+.p-toast-message {
+  padding: 10px 15px !important;
+  box-shadow: 3px 2px #88888844 !important;
+}

@@ -1,0 +1,273 @@
+@use "./variables" as *;
+@use "./mixins" as *;
+
+/* =========================
+   HELPERS
+========================= */
+%flex-center {
+  display: flex;
+  align-items: center;
+}
+
+/* =========================
+   FORM LAYOUT
+========================= */
+form {
+  @include displayFlex($direction: column, $gap: 15px);
+  h3 {
+    font-size: 14px;
+    font-weight: 400;
+
+    + hr {
+      margin-block: 4px 10px;
+    }
+  }
+
+  .inputs {
+    @extend %flex-center;
+    justify-content: center;
+    gap: 10px 20px;
+    width: 100%;
+    .input-wrap {
+      flex-grow: 1;
+    }
+
+    @media (max-width: 767px) {
+      flex-wrap: wrap;
+    }
+  }
+
+  .input-wrap {
+    width: 100%;
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 6px;
+
+      html.dark & {
+        color: #d1d5db;
+      }
+
+      span {
+        color: $secColor;
+        font-size: 12px;
+      }
+    }
+  }
+
+  .main-btn + p {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 400;
+    color: $secColor;
+
+    a {
+      color: $mainColor;
+      font-weight: 900;
+      margin-inline-start: 5px;
+    }
+  }
+}
+
+/* =========================
+   FIELD WRAPPER (.input)
+========================= */
+.input {
+  width: 100%;
+  border: 1.5px solid #d1d5db;
+  border-radius: 12px;
+  padding: 2px 14px;
+  background: $whiteColor;
+  position: relative;
+  transition: all 0.25s ease-in-out;
+
+  html.dark & {
+    background: #111827;
+    border-color: #374151;
+  }
+
+  @extend %flex-center;
+  gap: 8px;
+
+  &:hover {
+    border-color: #9ca3af;
+  }
+
+  &:focus-within {
+    border-color: $thirdColor;
+    box-shadow: 0 0 0 3.5px rgba($thirdColor, 0.15);
+  }
+
+  &.error,
+  &.has-error {
+    border-color: $dangerColor;
+    box-shadow: 0 0 0 3px rgba($dangerColor, 0.1);
+  }
+
+  /* Internal Fields inside .input */
+  input,
+  textarea,
+  select,
+  .p-inputtext,
+  .p-select-label,
+  .p-multiselect-label,
+  .p-datepicker-input {
+    width: 100%;
+    border: none !important;
+    outline: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+
+    padding: 10px 4px;
+    height: 44px;
+    font-size: 15px;
+    font-weight: 400;
+    font-family: inherit;
+    color: $textColor;
+    direction: inherit;
+
+    &::placeholder {
+      color: #9ca3af !important;
+    }
+
+    html.dark & {
+      color: #f9fafb;
+    }
+  }
+
+  /* Textarea inside .input */
+  textarea {
+    resize: none;
+    height: 120px;
+    padding-top: 10px;
+  }
+
+  /* Select inside .input */
+  select {
+    cursor: pointer;
+    color: $textColor;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    option {
+      background: $whiteColor;
+      color: $textColor;
+      padding: 8px;
+    }
+
+    html.dark & option {
+      background: #111827;
+      color: #f9fafb;
+    }
+  }
+
+  /* Icons inside .input */
+  i,
+  .icon {
+    color: #9ca3af;
+    font-size: 14px;
+    transition: color 0.25s ease-in-out;
+    flex-shrink: 0;
+  }
+
+  &:focus-within {
+    i,
+    .icon {
+      color: $thirdColor;
+    }
+  }
+}
+
+.p-checkbox-box {
+  border: 1px solid $formborderColor;
+}
+
+/* =========================
+   PLACEHOLDER STATE (UNIFIED)
+========================= */
+select:invalid,
+select {
+  color: $formColor;
+}
+
+select:valid {
+  color: $textColor;
+}
+
+.p-select-label.p-placeholder,
+.p-multiselect-label.p-placeholder {
+  color: $formColor !important;
+}
+
+/* =========================
+   PRIMEVUE COMPONENT RESET
+========================= */
+.p-select,
+.p-multiselect,
+.p-datepicker {
+  width: 100%;
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* =========================
+   MULTISELECT TOKENS
+========================= */
+.p-multiselect-token {
+  background: transparent !important;
+  color: $mainColor;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+/* overlay tweaks */
+.p-multiselect-overlay {
+  padding: 4px 10px !important;
+}
+
+.p-multiselect-header {
+  display: none;
+}
+
+/* =========================
+   DATEPICKER
+========================= */
+.p-component.p-datepicker-panel {
+  min-width: 500px !important;
+}
+
+.p-datepicker-day {
+  width: 100%;
+  height: 100%;
+  border-radius: 5px;
+}
+
+.p-datepicker-input {
+  width: 100%;
+  cursor: pointer;
+}
+
+/* =========================
+   INPUT CLEANUP
+========================= */
+input:-internal-autofill-selected {
+  background-color: transparent !important;
+}
+
+/* =========================
+   ERRORS
+========================= */
+.error_message,
+span[role="alert"] {
+  display: block;
+  margin-top: 4px;
+  margin-bottom: 6px;
+  color: $dangerColor;
+  font-size: 13px;
+  font-weight: 500;
+}

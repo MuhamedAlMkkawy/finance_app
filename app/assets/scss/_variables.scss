@@ -1,0 +1,24 @@
+/* MAIN FONT FAMILY */
+$fontFamily: "Expo Arabic";
+
+// ========== DEFINE MAIN VARIABLES ==============
+
+// TRANSITIONS WITH DIFFRENT TIMES
+$transition: all 0.5s ease-in-out;
+$transition3: all 0.3s ease-in-out;
+$transition7: all 0.7s ease-in-out;
+
+/* MAIN FONT SIZE */
+$fontSize: clamp(14px, 2.5vw, 18px);
+
+/* COLORS VARIABLES */
+$mainColor: #000000;
+$secColor: #bababa; 
+$thirdColor: #01b582; 
+$dangerColor: #f32323;
+$textColor: #1d1d1d; 
+
+$formColor: #333;
+$formborderColor: #e4e4e4;
+$whiteColor: #ffffff;
+$transparentColor: transparent;
