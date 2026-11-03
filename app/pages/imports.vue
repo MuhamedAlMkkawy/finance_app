@@ -18,6 +18,72 @@
       </div>
     </div>
 
+    <!-- Google Sheets Live Sync Card -->
+    <div class="bg-gradient-to-br from-white to-emerald-50/40 rounded-2xl border border-emerald-200/80 shadow-sm p-6">
+      <div class="flex items-center gap-3 pb-3 mb-4 border-b border-emerald-100">
+        <div class="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-md shadow-emerald-600/20">
+          <i class="pi pi-table text-base"></i>
+        </div>
+        <div>
+          <h2 class="text-base font-bold text-slate-900">{{ $t('imports.google_sheets_title') }}</h2>
+          <p class="text-xs text-slate-500">{{ $t('imports.google_sheets_subtitle') }}</p>
+        </div>
+      </div>
+
+      <div class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+            Google Sheets Document URL
+          </label>
+          <div class="flex flex-col sm:flex-row gap-2">
+            <input
+              v-model="googleSheetUrl"
+              type="url"
+              placeholder="https://docs.google.com/spreadsheets/d/.../edit"
+              class="flex-1 px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white text-xs font-mono text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 shadow-inner"
+            />
+            <button
+              @click="syncGoogleSheet"
+              :disabled="syncingSheet || !googleSheetUrl"
+              class="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold shadow-md shadow-emerald-600/20 transition disabled:opacity-50 whitespace-nowrap"
+            >
+              <i v-if="syncingSheet" class="pi pi-spin pi-spinner text-xs"></i>
+              <i v-else class="pi pi-sync text-xs"></i>
+              <span>{{ syncingSheet ? 'Connecting & Syncing...' : $t('imports.google_sheets_btn') }}</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 bg-white/80 rounded-xl border border-emerald-100 text-xs">
+          <div class="flex items-center gap-2 text-slate-600">
+            <i class="pi pi-info-circle text-emerald-600"></i>
+            <span>{{ $t('imports.google_sheets_notice') }}</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="text-[11px] font-bold text-slate-500">Strategy:</span>
+            <label class="flex items-center gap-1 cursor-pointer">
+              <input type="radio" value="replace" v-model="googleSheetStrategy" class="text-emerald-600" />
+              <span class="text-[11px] font-bold text-slate-700">Replace DB</span>
+            </label>
+            <label class="flex items-center gap-1 cursor-pointer">
+              <input type="radio" value="update" v-model="googleSheetStrategy" class="text-emerald-600" />
+              <span class="text-[11px] font-bold text-slate-700">Update</span>
+            </label>
+          </div>
+        </div>
+
+        <div v-if="sheetSyncMessage" :class="['p-3 rounded-xl text-xs flex items-start gap-2', sheetSyncSuccess ? 'bg-emerald-50 text-emerald-800 border border-emerald-200' : 'bg-rose-50 text-rose-800 border border-rose-200']">
+          <i :class="['mt-0.5', sheetSyncSuccess ? 'pi pi-check-circle text-emerald-600' : 'pi pi-exclamation-triangle text-rose-600']"></i>
+          <div>
+            <p class="font-bold">{{ sheetSyncMessage }}</p>
+            <p v-if="!sheetSyncSuccess" class="text-[11px] mt-1 text-rose-700">
+              Tip: In Google Sheets, click <strong>Share</strong> (top right) &gt; under <strong>General access</strong> select <strong>"Anyone with the link"</strong> (Viewer), then click sync again.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Upload & Preview Card -->
     <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6">
       <div class="flex items-center gap-2 pb-3 mb-4 border-b border-slate-100">
@@ -200,6 +266,12 @@
 </template>
 
 <script setup>
+const googleSheetUrl = ref('https://docs.google.com/spreadsheets/d/1oNYOxYolYO2SAK8kgu13IvYZIf8M8gyKv8QgaVw_Cq4/edit?gid=1892268511#gid=1892268511');
+const googleSheetStrategy = ref('replace');
+const syncingSheet = ref(false);
+const sheetSyncMessage = ref('');
+const sheetSyncSuccess = ref(false);
+
 const fileInputRef = ref(null);
 const dragOver = ref(false);
 const selectedFile = ref(null);
@@ -210,6 +282,30 @@ const importStrategy = ref('replace');
 const executing = ref(false);
 
 const batches = ref([]);
+
+async function syncGoogleSheet() {
+  if (!googleSheetUrl.value) return;
+  syncingSheet.value = true;
+  sheetSyncMessage.value = '';
+  sheetSyncSuccess.value = false;
+  try {
+    const res = await $fetch('/api/imports/google-sheets', {
+      method: 'POST',
+      body: {
+        url: googleSheetUrl.value,
+        strategy: googleSheetStrategy.value
+      }
+    });
+    sheetSyncSuccess.value = true;
+    sheetSyncMessage.value = res.message || `Successfully synced ${res.importedRows} rows from Google Sheets.`;
+    await loadBatches();
+  } catch (err) {
+    sheetSyncSuccess.value = false;
+    sheetSyncMessage.value = err?.data?.statusMessage || err?.data?.message || err?.message || 'Failed to sync from Google Sheets.';
+  } finally {
+    syncingSheet.value = false;
+  }
+}
 
 function handleDrop(e) {
   dragOver.value = false;

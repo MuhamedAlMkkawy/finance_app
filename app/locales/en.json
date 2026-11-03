@@ -228,6 +228,10 @@
   "imports": {
     "title": "Excel Data Import & Quality",
     "subtitle": "Upload workbook, preview 92 columns, validate records, and manage batches",
+    "google_sheets_title": "Google Sheets Database Live Sync",
+    "google_sheets_subtitle": "Connect directly to Google Sheets to replace or synchronize the entire SQLite database",
+    "google_sheets_btn": "Sync Database from Google Sheet",
+    "google_sheets_notice": "Ensure the Google Sheet is shared with 'Anyone with the link can view' for instant syncing.",
     "upload_zone": "Drop your .xlsx file here or click to browse",
     "strategy": "Import Strategy",
     "strategy_replace": "Replace entire dataset (Recommended for fresh sync)",
@@ -242,11 +246,22 @@
   "reports": {
     "title": "Executive Reports & Exports",
     "subtitle": "Download audited management reports in professional Excel and PDF formats",
+    "pptx_badge": "Official Presentation Deck",
+    "pptx_title": "Full Application Features & Executive Presentation (PowerPoint)",
+    "pptx_desc": "12 professional widescreen slides covering Architecture, 92-field preservation, Executive KPIs, Interactive Charts, Inventory & Properties Modules, and Security & Deployment.",
+    "download_pptx": "Download Presentation (.pptx)",
     "executive_report": "Executive Portfolio Report",
+    "executive_desc": "High-level synthesis of all 14 KPIs, property breakdown, sales distribution, and occupancy numbers.",
     "property_report": "Property Performance Breakdown",
+    "property_desc": "Building-by-building metrics comparing total units, sold ratios, area, and total sales volume.",
     "sales_report": "Sales & Revenue Analysis Report",
+    "sales_desc": "Itemized sales ledger detailing sold units, prices per square meter, taxes, and block rankings.",
     "inventory_report": "Commercial Inventory & Availability Report",
+    "inventory_desc": "Available units catalog with dimensions, block and floor locations, and current availability status.",
+    "financial_report": "Financial & Tax Audit Report",
+    "financial_desc": "Audited currency balances, brokerage amounts, facilities revenue, and zero-price flags.",
     "data_quality_report": "Data Quality & Anomaly Report",
+    "quality_desc": "Complete audit of 1900-01-01 legacy dates, mixed-case property identifiers, and schema completeness.",
     "download_excel": "Download Excel (.xlsx)",
     "download_pdf": "Download PDF (.pdf)"
   }

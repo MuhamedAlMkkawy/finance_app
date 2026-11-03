@@ -8,6 +8,33 @@
       </div>
     </div>
 
+    <!-- Presentation Showcase Banner -->
+    <div class="relative overflow-hidden bg-gradient-to-r from-slate-900 via-slate-800 to-emerald-950 rounded-2xl p-6 sm:p-8 text-white shadow-lg border border-slate-700/60 flex flex-col md:flex-row md:items-center justify-between gap-6">
+      <div class="max-w-2xl z-10">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-semibold mb-3 border border-emerald-500/30">
+          <i class="pi pi-desktop text-xs"></i>
+          <span>{{ $t('reports.pptx_badge') }}</span>
+        </div>
+        <h2 class="text-xl sm:text-2xl font-black tracking-tight text-white mb-2">
+          {{ $t('reports.pptx_title') }}
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+          {{ $t('reports.pptx_desc') }}
+        </p>
+      </div>
+      <div class="z-10 flex-shrink-0 flex flex-col sm:flex-row gap-3">
+        <a
+          href="/Property_Management_Analytics_Platform.pptx"
+          download="Property_Management_Analytics_Platform.pptx"
+          class="px-5 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs sm:text-sm transition flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20"
+        >
+          <i class="pi pi-download font-bold"></i>
+          <span>{{ $t('reports.download_pptx') }}</span>
+        </a>
+      </div>
+      <div class="absolute -right-12 -bottom-12 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+    </div>
+
     <!-- Reports Grid -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       <div

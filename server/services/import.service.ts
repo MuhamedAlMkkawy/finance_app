@@ -282,6 +282,111 @@ export class ImportService {
   }
 
   /**
+   * Sync and import dataset directly from a Google Sheet URL
+   */
+  static async syncFromGoogleSheet(
+    sheetUrl: string,
+    strategy: 'replace' | 'append' | 'update' = 'replace'
+  ) {
+    const idMatch = sheetUrl.match(/\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
+    if (!idMatch || !idMatch[1]) {
+      throw new Error('Invalid Google Sheet URL. Expected format: https://docs.google.com/spreadsheets/d/{SPREADSHEET_ID}/edit');
+    }
+    const sheetId = idMatch[1];
+
+    const gidMatch = sheetUrl.match(/[?&#]gid=([0-9]+)/);
+    const gid = gidMatch ? gidMatch[1] : undefined;
+
+    // Try fetching as XLSX first (supports full types and multi-sheet)
+    const exportUrls = [
+      `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=xlsx${gid ? `&gid=${gid}` : ''}`,
+      `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv${gid ? `&gid=${gid}` : ''}`
+    ];
+
+    let lastError = '';
+    for (const url of exportUrls) {
+      try {
+        const response = await fetch(url, {
+          headers: {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) NuxtPropertyApp/1.0'
+          },
+          redirect: 'follow'
+        });
+
+        if (!response.ok) {
+          if (response.status === 401 || response.status === 403) {
+            throw new Error(
+              'The Google Sheet is private or requires authorization (Google returned HTTP ' + response.status + '). ' +
+              'To allow the app to replace the database with this sheet, please open the Google Sheet, click "Share" at top right, and set General access to "Anyone with the link can view" (Viewer).'
+            );
+          }
+          lastError = `Google responded with HTTP status ${response.status} (${response.statusText})`;
+          continue;
+        }
+
+        const contentType = response.headers.get('content-type') || '';
+        const buffer = Buffer.from(await response.arrayBuffer());
+
+        // Check if Google redirected to a login page
+        const headSnippet = buffer.slice(0, 1000).toString('utf-8');
+        if (
+          headSnippet.includes('accounts.google.com') ||
+          headSnippet.includes('ServiceLogin') ||
+          headSnippet.includes('<title>Google Accounts</title>') ||
+          (contentType.includes('text/html') && headSnippet.includes('<!DOCTYPE html>'))
+        ) {
+          throw new Error(
+            'The Google Sheet requires authorization and is currently private (HTTP 302 Redirect to Google Login). ' +
+            'Please open the Google Sheet, click "Share" at top-right, and change "General access" to "Anyone with the link can view", then try syncing again.'
+          );
+        }
+
+        // Parse through xlsx
+        const isCsv = url.includes('format=csv') || contentType.includes('text/csv');
+        const wb = xlsx.read(buffer, {
+          type: 'buffer',
+          cellDates: true,
+          raw: false
+        });
+
+        const sheetName = wb.SheetNames[0];
+        const sheet = wb.Sheets[sheetName];
+        const rawData = xlsx.utils.sheet_to_json<any>(sheet, { defval: null });
+
+        if (!rawData || rawData.length === 0) {
+          throw new Error('The downloaded Google Sheet contains 0 data rows.');
+        }
+
+        const importResult = await this.executeImport(
+          `Google Sheet [${sheetId.slice(0, 8)}...]`,
+          rawData,
+          strategy
+        );
+
+        return {
+          success: true,
+          sheetId,
+          gid,
+          totalRows: rawData.length,
+          batchId: importResult.batchId,
+          importedRows: importResult.importedRows,
+          updatedRows: importResult.updatedRows,
+          failedRows: importResult.failedRows,
+          issuesCount: importResult.issuesCount,
+          message: `Successfully synced ${importResult.importedRows} units from Google Sheet into database.`
+        };
+      } catch (err: any) {
+        if (err.message && err.message.includes('requires authorization')) {
+          throw err;
+        }
+        lastError = err.message || String(err);
+      }
+    }
+
+    throw new Error(lastError || 'Failed to download or parse Google Sheet.');
+  }
+
+  /**
    * Ensure default dataset is imported on app startup
    */
   static async ensureDatasetImported() {
