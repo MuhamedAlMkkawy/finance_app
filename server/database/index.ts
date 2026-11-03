@@ -3,18 +3,41 @@ import { drizzle } from 'drizzle-orm/better-sqlite3';
 import * as schema from './schema';
 import path from 'node:path';
 import fs from 'node:fs';
+import os from 'node:os';
 import bcrypt from 'bcryptjs';
 
-const dbDir = path.resolve(process.cwd(), 'data');
-if (!fs.existsSync(dbDir)) {
-  fs.mkdirSync(dbDir, { recursive: true });
+const isServerless = !!(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME || process.env.NETLIFY);
+let dbPath = path.resolve(process.cwd(), 'data', 'app.db');
+
+if (isServerless) {
+  const tmpDir = os.tmpdir();
+  const tmpDb = path.join(tmpDir, 'app.db');
+  if (!fs.existsSync(tmpDb)) {
+    const srcDb = path.resolve(process.cwd(), 'data', 'app.db');
+    if (fs.existsSync(srcDb)) {
+      try {
+        fs.copyFileSync(srcDb, tmpDb);
+      } catch (e) {
+        console.error('Failed to copy database to /tmp:', e);
+      }
+    }
+  }
+  dbPath = tmpDb;
+} else {
+  const dbDir = path.resolve(process.cwd(), 'data');
+  if (!fs.existsSync(dbDir)) {
+    fs.mkdirSync(dbDir, { recursive: true });
+  }
 }
 
-const dbPath = path.join(dbDir, 'app.db');
 const sqlite = new Database(dbPath);
 
-// Enable WAL mode for high concurrency & performance
-sqlite.pragma('journal_mode = WAL');
+// Enable WAL mode on local node servers, DELETE on serverless /tmp
+if (!isServerless) {
+  sqlite.pragma('journal_mode = WAL');
+} else {
+  sqlite.pragma('journal_mode = DELETE');
+}
 sqlite.pragma('foreign_keys = ON');
 
 export const db = drizzle(sqlite, { schema });
