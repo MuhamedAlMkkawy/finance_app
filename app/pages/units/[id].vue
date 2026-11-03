@@ -162,7 +162,7 @@
       </div>
 
       <!-- Raw JSON Inspection Accordion (Guarantees all 92 fields visible) -->
-      <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-5">
+      <!-- <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-5">
         <details class="group cursor-pointer">
           <summary class="flex items-center justify-between text-xs font-bold text-slate-800 select-none">
             <div class="flex items-center gap-2">
@@ -175,7 +175,7 @@
             <pre class="bg-slate-900 text-emerald-400 p-4 rounded-xl text-xs font-mono overflow-x-auto max-h-96">{{ JSON.stringify(data.categorized.rawData, null, 2) }}</pre>
           </div>
         </details>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
