@@ -178,6 +178,7 @@ const globalSearch = ref('')
 
 const navItems = [
   { to: '/dashboard', label: 'nav.dashboard', icon: 'pi pi-chart-pie' },
+  { to: '/charts', label: 'nav.charts', icon: 'pi pi-chart-bar' },
   { to: '/properties', label: 'nav.properties', icon: 'pi pi-building' },
   { to: '/units', label: 'nav.units', icon: 'pi pi-list', badge: '1,034' },
   { to: '/data-explorer', label: 'nav.data_explorer', icon: 'pi pi-database' },

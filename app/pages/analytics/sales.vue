@@ -4,7 +4,7 @@
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div>
         <h1 class="text-2xl font-black text-slate-900 tracking-tight">{{ $t('analytics.sales_title') }}</h1>
-        <p class="text-xs text-slate-500 mt-1">Deep analysis of recorded sales, pricing, top assets, and property contributions</p>
+        <p class="text-xs text-slate-500 mt-1">{{ $t('analytics.sales_subtitle') }}</p>
       </div>
 
       <div class="flex items-center gap-2">
@@ -13,7 +13,7 @@
           class="inline-flex items-center gap-2 px-3.5 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 rounded-xl text-xs font-bold transition-colors"
         >
           <i class="pi pi-file-excel text-xs"></i>
-          <span>Export Sales Report</span>
+          <span>{{ $t('analytics.export_sales') }}</span>
         </NuxtLink>
       </div>
     </div>
@@ -25,35 +25,35 @@
       <!-- High Level Sales KPIs -->
       <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
         <div class="p-4 bg-white rounded-2xl border border-emerald-200 shadow-xs">
-          <span class="text-[10px] font-bold text-slate-400 uppercase block">Total Sales Value</span>
+          <span class="text-[10px] font-bold text-slate-400 uppercase block">{{ $t('analytics.total_sales_value') }}</span>
           <span class="text-lg font-black text-emerald-700 mt-1 block">
             {{ formatCompact(data.totals.totalSaleValue) }} SAR
           </span>
         </div>
         <div class="p-4 bg-white rounded-2xl border border-slate-200 shadow-xs">
-          <span class="text-[10px] font-bold text-slate-400 uppercase block">Sold Units</span>
+          <span class="text-[10px] font-bold text-slate-400 uppercase block">{{ $t('dashboard.kpis.sold_units') }}</span>
           <span class="text-lg font-black text-slate-900 mt-1 block">{{ data.totals.soldUnitsCount }}</span>
         </div>
         <div class="p-4 bg-white rounded-2xl border border-slate-200 shadow-xs">
-          <span class="text-[10px] font-bold text-slate-400 uppercase block">Average Sale Price</span>
+          <span class="text-[10px] font-bold text-slate-400 uppercase block">{{ $t('dashboard.kpis.avg_sale_amount') }}</span>
           <span class="text-lg font-black text-sky-700 mt-1 block">
             {{ formatCompact(data.totals.avgSaleAmount) }} SAR
           </span>
         </div>
         <div class="p-4 bg-white rounded-2xl border border-slate-200 shadow-xs">
-          <span class="text-[10px] font-bold text-slate-400 uppercase block">Average Price / m²</span>
+          <span class="text-[10px] font-bold text-slate-400 uppercase block">{{ $t('dashboard.kpis.avg_price_sqm') }}</span>
           <span class="text-lg font-black text-teal-700 mt-1 block">
             {{ data.totals.avgPricePerSqm.toLocaleString() }} SAR/m²
           </span>
         </div>
         <div class="p-4 bg-white rounded-2xl border border-slate-200 shadow-xs">
-          <span class="text-[10px] font-bold text-slate-400 uppercase block">Sales Tax Total</span>
+          <span class="text-[10px] font-bold text-slate-400 uppercase block">{{ $t('dashboard.kpis.total_sales_tax') }}</span>
           <span class="text-lg font-black text-slate-700 mt-1 block">
             {{ formatCompact(data.totals.totalSaleTax) }} SAR
           </span>
         </div>
         <div class="p-4 bg-white rounded-2xl border border-slate-200 shadow-xs">
-          <span class="text-[10px] font-bold text-slate-400 uppercase block">Zero Sale Units</span>
+          <span class="text-[10px] font-bold text-slate-400 uppercase block">{{ $t('analytics.zero_sale_units') }}</span>
           <span class="text-lg font-black text-amber-600 mt-1 block">{{ data.totals.zeroSaleCount }}</span>
         </div>
       </div>
@@ -62,21 +62,27 @@
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <!-- Sales by Property Chart -->
         <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-5 flex flex-col">
-          <h3 class="text-sm font-bold text-slate-900 mb-4 pb-2 border-b border-slate-100">
-            Sales Revenue by Property
-          </h3>
-          <div class="flex-1 min-h-[300px]">
-            <BaseChart :options="byPropertyChartOptions" />
+          <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
+            <h3 class="text-sm font-bold text-slate-900">
+              {{ $t('dashboard.charts.sales_by_property') }}
+            </h3>
+            <span class="text-[10px] text-slate-400 font-bold uppercase">SAR</span>
+          </div>
+          <div class="flex-1">
+            <BaseChart :options="byPropertyChartOptions" :loading="loading" :height="320" />
           </div>
         </div>
 
         <!-- Sales by Block Chart -->
         <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-5 flex flex-col">
-          <h3 class="text-sm font-bold text-slate-900 mb-4 pb-2 border-b border-slate-100">
-            Sales Revenue by Block (Top 12 Blocks)
-          </h3>
-          <div class="flex-1 min-h-[300px]">
-            <BaseChart :options="byBlockChartOptions" />
+          <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
+            <h3 class="text-sm font-bold text-slate-900">
+              {{ $t('dashboard.charts.units_by_block') }}
+            </h3>
+            <span class="text-[10px] text-slate-400 font-bold uppercase">SAR</span>
+          </div>
+          <div class="flex-1">
+            <BaseChart :options="byBlockChartOptions" :loading="loading" :height="320" />
           </div>
         </div>
       </div>
@@ -88,17 +94,17 @@
           <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider mb-3 flex items-center justify-between">
             <span class="flex items-center gap-1.5 text-emerald-700">
               <i class="pi pi-arrow-up-right"></i>
-              <span>Top 10 Highest-Value Assets</span>
+              <span>{{ $t('analytics.top_units') }}</span>
             </span>
           </h3>
           <div class="overflow-x-auto">
             <table class="w-full text-xs text-left">
               <thead class="bg-slate-50 text-slate-500 font-bold uppercase text-[10px]">
                 <tr>
-                  <th class="p-2">Unit ID</th>
-                  <th class="p-2">Property</th>
-                  <th class="p-2">Area (m²)</th>
-                  <th class="p-2 text-right">Sale Amount (SAR)</th>
+                  <th class="p-2">{{ $t('analytics.unit_id') }}</th>
+                  <th class="p-2">{{ $t('analytics.property') }}</th>
+                  <th class="p-2">{{ $t('units.area') }}</th>
+                  <th class="p-2 text-right">{{ $t('units.sale_amount') }}</th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-slate-100 font-medium">
@@ -124,17 +130,17 @@
           <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider mb-3 flex items-center justify-between">
             <span class="flex items-center gap-1.5 text-amber-700">
               <i class="pi pi-arrow-down-right"></i>
-              <span>Lowest-Value Assets (Above 0)</span>
+              <span>{{ $t('analytics.lowest_units') }}</span>
             </span>
           </h3>
           <div class="overflow-x-auto">
             <table class="w-full text-xs text-left">
               <thead class="bg-slate-50 text-slate-500 font-bold uppercase text-[10px]">
                 <tr>
-                  <th class="p-2">Unit ID</th>
-                  <th class="p-2">Property</th>
-                  <th class="p-2">Area (m²)</th>
-                  <th class="p-2 text-right">Sale Amount (SAR)</th>
+                  <th class="p-2">{{ $t('analytics.unit_id') }}</th>
+                  <th class="p-2">{{ $t('analytics.property') }}</th>
+                  <th class="p-2">{{ $t('units.area') }}</th>
+                  <th class="p-2 text-right">{{ $t('units.sale_amount') }}</th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-slate-100 font-medium">
@@ -160,7 +166,11 @@
 </template>
 
 <script setup>
+import BaseChart from '~/components/charts/BaseChart.vue';
+
 const localePath = useLocalePath();
+const { t } = useI18n();
+
 const loading = ref(true);
 const data = ref(null);
 
@@ -196,7 +206,7 @@ const byPropertyChartOptions = computed(() => {
     },
     series: [
       {
-        name: 'Sales Amount',
+        name: t('analytics.total_sale_amount'),
         type: 'bar',
         barWidth: '45%',
         itemStyle: { color: '#059669', borderRadius: [6, 6, 0, 0] },
@@ -223,7 +233,7 @@ const byBlockChartOptions = computed(() => {
     },
     series: [
       {
-        name: 'Sales Amount',
+        name: t('analytics.total_sale_amount'),
         type: 'bar',
         barWidth: '45%',
         itemStyle: { color: '#0284C7', borderRadius: [6, 6, 0, 0] },
@@ -240,4 +250,3 @@ function formatCompact(val) {
   return val?.toLocaleString() || '0';
 }
 </script>
-

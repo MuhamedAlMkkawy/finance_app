@@ -33,14 +33,14 @@
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
         <!-- Search Keyword -->
         <div class="col-span-1 sm:col-span-2">
-          <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Search Keyword</label>
+          <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">{{ $t('common.search') }}</label>
           <div class="relative">
             <i class="pi pi-search absolute start-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
             <input
               v-model="filters.search"
               @input="debounceSearch"
               type="text"
-              placeholder="Search by Unit ID, Name, Property, Block..."
+              :placeholder="$t('common.search')"
               class="w-full ps-8 pe-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:border-emerald-500"
             />
           </div>
@@ -48,26 +48,26 @@
 
         <!-- Property Filter -->
         <div>
-          <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Property</label>
+          <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">{{ $t('units.property_id') }}</label>
           <select
             v-model="filters.property"
             @change="fetchUnits(1)"
             class="w-full text-xs bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 focus:bg-white focus:outline-none focus:border-emerald-500"
           >
-            <option value="">All Properties</option>
+            <option value="">{{ $t('common.all') }}</option>
             <option v-for="p in filterOptions.properties" :key="p.value" :value="p.value">{{ p.label }}</option>
           </select>
         </div>
 
         <!-- Sales Status Filter -->
         <div>
-          <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Sales Status</label>
+          <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">{{ $t('units.sales_status') }}</label>
           <select
             v-model="filters.salesStatus"
             @change="fetchUnits(1)"
             class="w-full text-xs bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 focus:bg-white focus:outline-none focus:border-emerald-500"
           >
-            <option value="">All Statuses</option>
+            <option value="">{{ $t('common.all') }}</option>
             <option value="Sold">Sold</option>
             <option value="Available">Available</option>
           </select>
@@ -75,20 +75,20 @@
 
         <!-- Block Filter -->
         <div>
-          <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Block</label>
+          <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">{{ $t('units.block') }}</label>
           <select
             v-model="filters.block"
             @change="fetchUnits(1)"
             class="w-full text-xs bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 focus:bg-white focus:outline-none focus:border-emerald-500"
           >
-            <option value="">All Blocks</option>
+            <option value="">{{ $t('common.all') }}</option>
             <option v-for="b in filterOptions.blocks" :key="b" :value="b">Block {{ b }}</option>
           </select>
         </div>
 
         <!-- Page Size -->
         <div>
-          <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Page Size</label>
+          <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">{{ $t('common.view') }}</label>
           <select
             v-model="pageSize"
             @change="fetchUnits(1)"

@@ -46,6 +46,21 @@
           </button>
         </div>
 
+        <!-- Demo Credentials Helper -->
+        <div v-if="mode === 'login'" class="mb-6 p-3 bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800/50 rounded-2xl flex items-center justify-between text-xs">
+          <div>
+            <span class="font-bold text-emerald-900 dark:text-emerald-200 block">{{ $t('auth.demo_credentials') }}</span>
+            <span class="text-emerald-700 dark:text-emerald-400 font-mono text-[11px]">admin@property.com / admin123</span>
+          </div>
+          <button
+            type="button"
+            @click="fillAdminCredentials"
+            class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold text-[11px] shadow-xs transition-colors shrink-0"
+          >
+            {{ $t('auth.fill_admin') }}
+          </button>
+        </div>
+
         <form @submit.prevent="handleSubmit" class="space-y-5">
           <div class="space-y-1.5 w-full">
             <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
@@ -94,7 +109,7 @@
             </div>
             <p v-if="errors.password" class="text-red-500 dark:text-red-400 text-xs mt-1">{{ errors.password }}</p>
           </div>
-
+          
           <Transition name="fade">
             <div v-if="mode === 'register'" class="space-y-1.5 w-full">
               <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
@@ -107,11 +122,19 @@
                 <i class="pi pi-lock text-gray-400 text-sm flex-shrink-0"></i>
                 <input
                   v-model="form.confirmPassword"
-                  :type="showPassword ? 'text' : 'password'"
+                  :type="showConfirmPassword ? 'text' : 'password'"
                   :placeholder="$t('auth.password_placeholder')"
                   autocomplete="new-password"
                   class="flex-1 bg-transparent text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-600 text-sm outline-none"
-                />
+                  />
+                  <button
+                    type="button"
+                    @click="showConfirmPassword = !showConfirmPassword"
+                    class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors flex-shrink-0"
+                    :title="showConfirmPassword ? $t('auth.hide_password') : $t('auth.show_password')"
+                  >
+                    <i :class="showConfirmPassword ? 'pi pi-eye-slash' : 'pi pi-eye'" class="text-sm"></i>
+                  </button>
               </div>
               <p v-if="errors.confirmPassword" class="text-red-500 dark:text-red-400 text-xs mt-1">{{ errors.confirmPassword }}</p>
             </div>
@@ -165,6 +188,7 @@ const localePath = useLocalePath()
 const mode = ref('login')
 const loading = ref(false)
 const showPassword = ref(false)
+const showConfirmPassword = ref(false)
 const serverError = ref('')
 
 const form = reactive({
@@ -229,6 +253,11 @@ function validate() {
   return valid
 }
 
+function fillAdminCredentials() {
+  form.email = 'admin@property.com'
+  form.password = 'admin123'
+}
+
 async function handleSubmit() {
   if (!validate()) return
 
@@ -246,7 +275,7 @@ async function handleSubmit() {
     })
 
     authStore.handleUserData(res.user)
-    await router.push(localePath('/'))
+    await router.push(localePath('/dashboard'))
   } catch (err) {
     serverError.value = err?.data?.statusMessage || err?.statusMessage || t('auth.errors.generic')
   } finally {

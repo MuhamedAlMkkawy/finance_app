@@ -3,8 +3,8 @@
     <!-- Header -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div>
-        <h1 class="text-2xl font-black text-slate-900 tracking-tight">Portfolio Visual Analytics & Charts</h1>
-        <p class="text-xs text-slate-500 mt-1">Interactive graphical representations of sales, unit distributions, area bins, and building performance</p>
+        <h1 class="text-2xl font-black text-slate-900 tracking-tight">{{ $t('charts_page.title') }}</h1>
+        <p class="text-xs text-slate-500 mt-1">{{ $t('charts_page.subtitle') }}</p>
       </div>
 
       <div class="flex items-center gap-2">
@@ -14,14 +14,14 @@
           class="inline-flex items-center gap-2 px-3.5 py-2 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 rounded-xl text-xs font-semibold shadow-xs transition-colors"
         >
           <i :class="['pi pi-sync text-xs', loading ? 'pi-spin' : '']"></i>
-          <span>Refresh Charts</span>
+          <span>{{ $t('common.refresh') }}</span>
         </button>
         <NuxtLink
           :to="localePath('/dashboard')"
           class="inline-flex items-center gap-2 px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition-colors"
         >
           <i class="pi pi-th-large text-xs"></i>
-          <span>Dashboard View</span>
+          <span>{{ $t('nav.dashboard') }}</span>
         </NuxtLink>
       </div>
     </div>
@@ -36,19 +36,19 @@
     <!-- Quick Highlights -->
     <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
       <div class="p-3 bg-white rounded-xl border border-slate-200 shadow-xs flex items-center justify-between">
-        <span class="text-xs font-semibold text-slate-500">Total Units</span>
+        <span class="text-xs font-semibold text-slate-500">{{ $t('dashboard.kpis.total_records') }}</span>
         <span class="text-base font-black text-slate-900">{{ kpis.totalUnitRecords || 1034 }}</span>
       </div>
       <div class="p-3 bg-white rounded-xl border border-emerald-200 shadow-xs flex items-center justify-between">
-        <span class="text-xs font-semibold text-emerald-700">Sold Units</span>
+        <span class="text-xs font-semibold text-emerald-700">{{ $t('dashboard.kpis.sold_units') }}</span>
         <span class="text-base font-black text-emerald-700">{{ kpis.soldUnits || 931 }}</span>
       </div>
       <div class="p-3 bg-white rounded-xl border border-amber-200 shadow-xs flex items-center justify-between">
-        <span class="text-xs font-semibold text-amber-700">Available Units</span>
+        <span class="text-xs font-semibold text-amber-700">{{ $t('dashboard.kpis.available_units') }}</span>
         <span class="text-base font-black text-amber-700">{{ kpis.availableUnits || 103 }}</span>
       </div>
       <div class="p-3 bg-white rounded-xl border border-slate-200 shadow-xs flex items-center justify-between">
-        <span class="text-xs font-semibold text-slate-500">Total Sales</span>
+        <span class="text-xs font-semibold text-slate-500">{{ $t('dashboard.kpis.total_sales_amount') }}</span>
         <span class="text-base font-black text-slate-900">{{ formatCompact(kpis.totalRecordedSaleAmount || 1420933088) }} SAR</span>
       </div>
     </div>
@@ -60,9 +60,9 @@
         <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-3">
           <div class="flex items-center gap-2">
             <div class="w-2.5 h-2.5 rounded-full bg-emerald-500"></div>
-            <h3 class="text-sm font-bold text-slate-800">Commercial Status: Sold vs Available</h3>
+            <h3 class="text-sm font-bold text-slate-800">{{ $t('dashboard.charts.sold_vs_available') }}</h3>
           </div>
-          <span class="text-[10px] text-slate-400 font-bold uppercase">Pie / Doughnut</span>
+          <span class="text-[10px] text-slate-400 font-bold uppercase">{{ $t('charts_page.doughnut') }}</span>
         </div>
         <div class="flex-1">
           <BaseChart :options="soldVsAvailableChartOptions" :loading="loading" :height="340" />
@@ -74,9 +74,9 @@
         <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-3">
           <div class="flex items-center gap-2">
             <div class="w-2.5 h-2.5 rounded-full bg-sky-500"></div>
-            <h3 class="text-sm font-bold text-slate-800">Recorded Sales Revenue by Property</h3>
+            <h3 class="text-sm font-bold text-slate-800">{{ $t('dashboard.charts.sales_by_property') }}</h3>
           </div>
-          <span class="text-[10px] text-slate-400 font-bold uppercase">Bar Chart</span>
+          <span class="text-[10px] text-slate-400 font-bold uppercase">{{ $t('charts_page.bar') }}</span>
         </div>
         <div class="flex-1">
           <BaseChart :options="salesByPropertyChartOptions" :loading="loading" :height="340" />
@@ -88,9 +88,9 @@
         <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-3">
           <div class="flex items-center gap-2">
             <div class="w-2.5 h-2.5 rounded-full bg-indigo-500"></div>
-            <h3 class="text-sm font-bold text-slate-800">Unit Inventory by Property (Total vs Sold)</h3>
+            <h3 class="text-sm font-bold text-slate-800">{{ $t('dashboard.charts.units_by_property') }}</h3>
           </div>
-          <span class="text-[10px] text-slate-400 font-bold uppercase">Stacked Bar</span>
+          <span class="text-[10px] text-slate-400 font-bold uppercase">{{ $t('charts_page.stacked') }}</span>
         </div>
         <div class="flex-1">
           <BaseChart :options="unitsByPropertyChartOptions" :loading="loading" :height="340" />
@@ -102,9 +102,9 @@
         <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-3">
           <div class="flex items-center gap-2">
             <div class="w-2.5 h-2.5 rounded-full bg-amber-500"></div>
-            <h3 class="text-sm font-bold text-slate-800">Unit Distribution by Block (Top Blocks)</h3>
+            <h3 class="text-sm font-bold text-slate-800">{{ $t('dashboard.charts.units_by_block') }}</h3>
           </div>
-          <span class="text-[10px] text-slate-400 font-bold uppercase">Ranked Bar</span>
+          <span class="text-[10px] text-slate-400 font-bold uppercase">{{ $t('charts_page.ranked') }}</span>
         </div>
         <div class="flex-1">
           <BaseChart :options="unitsByBlockChartOptions" :loading="loading" :height="340" />
@@ -116,9 +116,9 @@
         <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-3">
           <div class="flex items-center gap-2">
             <div class="w-2.5 h-2.5 rounded-full bg-purple-500"></div>
-            <h3 class="text-sm font-bold text-slate-800">Unit Area Distribution Bins</h3>
+            <h3 class="text-sm font-bold text-slate-800">{{ $t('dashboard.charts.area_distribution') }}</h3>
           </div>
-          <span class="text-[10px] text-slate-400 font-bold uppercase">Histogram</span>
+          <span class="text-[10px] text-slate-400 font-bold uppercase">{{ $t('charts_page.histogram') }}</span>
         </div>
         <div class="flex-1">
           <BaseChart :options="areaDistributionChartOptions" :loading="loading" :height="340" />
@@ -130,9 +130,9 @@
         <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-3">
           <div class="flex items-center gap-2">
             <div class="w-2.5 h-2.5 rounded-full bg-teal-500"></div>
-            <h3 class="text-sm font-bold text-slate-800">Sales Value vs Total Area Comparison</h3>
+            <h3 class="text-sm font-bold text-slate-800">{{ $t('dashboard.charts.financial_comparison') }}</h3>
           </div>
-          <span class="text-[10px] text-slate-400 font-bold uppercase">Dual Axis</span>
+          <span class="text-[10px] text-slate-400 font-bold uppercase">{{ $t('charts_page.dual_axis') }}</span>
         </div>
         <div class="flex-1">
           <BaseChart :options="financialComparisonChartOptions" :loading="loading" :height="340" />
@@ -144,9 +144,9 @@
         <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-3">
           <div class="flex items-center gap-2">
             <div class="w-2.5 h-2.5 rounded-full bg-rose-500"></div>
-            <h3 class="text-sm font-bold text-slate-800">Floor-Level Distribution</h3>
+            <h3 class="text-sm font-bold text-slate-800">{{ $t('dashboard.charts.units_by_floor') }}</h3>
           </div>
-          <span class="text-[10px] text-slate-400 font-bold uppercase">Levels</span>
+          <span class="text-[10px] text-slate-400 font-bold uppercase">{{ $t('charts_page.levels') }}</span>
         </div>
         <div class="flex-1">
           <BaseChart :options="unitsByFloorChartOptions" :loading="loading" :height="300" />
@@ -157,6 +157,9 @@
 </template>
 
 <script setup>
+import BaseChart from '~/components/charts/BaseChart.vue';
+import GlobalFilterBar from '~/components/filters/GlobalFilterBar.vue';
+
 const localePath = useLocalePath();
 const router = useRouter();
 

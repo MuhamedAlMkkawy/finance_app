@@ -47,11 +47,13 @@
 </template>
 
 <script setup>
-const reportList = [
+const { t } = useI18n();
+
+const reportList = computed(() => [
   {
     id: 'executive',
-    title: 'Executive Portfolio Report',
-    description: 'High-level synthesis of all 14 KPIs, property breakdown, sales distribution, and occupancy numbers.',
+    title: t('reports.executive_report'),
+    description: t('reports.executive_desc', 'High-level synthesis of all 14 KPIs, property breakdown, sales distribution, and occupancy numbers.'),
     icon: 'pi pi-chart-pie',
     iconBg: 'bg-emerald-50',
     iconColor: 'text-emerald-600',
@@ -60,8 +62,8 @@ const reportList = [
   },
   {
     id: 'property',
-    title: 'Property Performance Report',
-    description: 'Building-by-building metrics comparing total units, sold ratios, area, and total sales volume.',
+    title: t('reports.property_report'),
+    description: t('reports.property_desc', 'Building-by-building metrics comparing total units, sold ratios, area, and total sales volume.'),
     icon: 'pi pi-building',
     iconBg: 'bg-sky-50',
     iconColor: 'text-sky-600',
@@ -70,8 +72,8 @@ const reportList = [
   },
   {
     id: 'sales',
-    title: 'Sales & Revenue Analysis',
-    description: 'Itemized sales ledger detailing sold units, prices per square meter, taxes, and block rankings.',
+    title: t('reports.sales_report'),
+    description: t('reports.sales_desc', 'Itemized sales ledger detailing sold units, prices per square meter, taxes, and block rankings.'),
     icon: 'pi pi-dollar',
     iconBg: 'bg-indigo-50',
     iconColor: 'text-indigo-600',
@@ -80,8 +82,8 @@ const reportList = [
   },
   {
     id: 'inventory',
-    title: 'Commercial Inventory Report',
-    description: 'Available units catalog with dimensions, block and floor locations, and current availability status.',
+    title: t('reports.inventory_report'),
+    description: t('reports.inventory_desc', 'Available units catalog with dimensions, block and floor locations, and current availability status.'),
     icon: 'pi pi-box',
     iconBg: 'bg-amber-50',
     iconColor: 'text-amber-600',
@@ -90,8 +92,8 @@ const reportList = [
   },
   {
     id: 'financial',
-    title: 'Financial & Tax Audit Report',
-    description: 'Audited currency balances, brokerage amounts, facilities revenue, and zero-price flags.',
+    title: t('reports.financial_report', 'Financial & Tax Audit Report'),
+    description: t('reports.financial_desc', 'Audited currency balances, brokerage amounts, facilities revenue, and zero-price flags.'),
     icon: 'pi pi-wallet',
     iconBg: 'bg-teal-50',
     iconColor: 'text-teal-600',
@@ -100,13 +102,13 @@ const reportList = [
   },
   {
     id: 'quality',
-    title: 'Data Quality & Anomaly Report',
-    description: 'Complete audit of 1900-01-01 legacy dates, mixed-case property identifiers, and schema completeness.',
+    title: t('reports.data_quality_report'),
+    description: t('reports.quality_desc', 'Complete audit of 1900-01-01 legacy dates, mixed-case property identifiers, and schema completeness.'),
     icon: 'pi pi-check-circle',
     iconBg: 'bg-rose-50',
     iconColor: 'text-rose-600',
     excelUrl: '/api/reports/executive?format=excel',
     pdfUrl: '/api/reports/executive?format=pdf'
   }
-];
+]);
 </script>

@@ -13,7 +13,7 @@
           class="inline-flex items-center gap-2 px-3.5 py-2 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 rounded-xl text-xs font-semibold shadow-xs transition-colors"
         >
           <i :class="['pi pi-sync text-xs', loading ? 'pi-spin' : '']"></i>
-          <span>Refresh Data</span>
+          <span>{{ $t('common.refresh') }}</span>
         </button>
         <NuxtLink
           :to="localePath('/reports')"
@@ -122,10 +122,11 @@
           </div>
           <span class="text-[10px] text-slate-400 font-semibold uppercase">Square Meters</span>
         </div>
-        <div class="flex-1 min-h-[300px]">
+        <div class="flex-1">
           <BaseChart
             :options="areaDistributionChartOptions"
             :loading="loading"
+            :height="320"
           />
         </div>
       </div>
@@ -139,10 +140,11 @@
           </div>
           <span class="text-[10px] text-slate-400 font-semibold uppercase">Sales vs Area</span>
         </div>
-        <div class="flex-1 min-h-[300px]">
+        <div class="flex-1">
           <BaseChart
             :options="financialComparisonChartOptions"
             :loading="loading"
+            :height="320"
           />
         </div>
       </div>
@@ -151,6 +153,10 @@
 </template>
 
 <script setup>
+import BaseChart from '~/components/charts/BaseChart.vue';
+import GlobalFilterBar from '~/components/filters/GlobalFilterBar.vue';
+import KPICards from '~/components/dashboard/KPICards.vue';
+
 const router = useRouter();
 const localePath = useLocalePath();
 

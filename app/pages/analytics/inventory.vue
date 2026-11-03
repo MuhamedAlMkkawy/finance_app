@@ -4,7 +4,7 @@
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div>
         <h1 class="text-2xl font-black text-slate-900 tracking-tight">{{ $t('analytics.inventory_title') }}</h1>
-        <p class="text-xs text-slate-500 mt-1">Commercial availability vs operational occupancy, vacancy rates, and conflicting statuses</p>
+        <p class="text-xs text-slate-500 mt-1">{{ $t('analytics.inventory_subtitle') }}</p>
       </div>
 
       <div class="flex items-center gap-2">
@@ -13,7 +13,7 @@
           class="inline-flex items-center gap-2 px-3.5 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 rounded-xl text-xs font-bold transition-colors"
         >
           <i class="pi pi-file-excel text-xs"></i>
-          <span>Inventory Export</span>
+          <span>{{ $t('analytics.export_inventory') }}</span>
         </NuxtLink>
       </div>
     </div>
@@ -25,41 +25,55 @@
       <!-- 5 Inventory Distinct Cards -->
       <div class="grid grid-cols-2 sm:grid-cols-5 gap-3">
         <div class="p-4 bg-white rounded-2xl border border-slate-200 shadow-xs">
-          <span class="text-[10px] font-bold text-slate-400 uppercase block">Total Units</span>
+          <span class="text-[10px] font-bold text-slate-400 uppercase block">{{ $t('dashboard.kpis.total_records') }}</span>
           <span class="text-xl font-black text-slate-900 mt-1 block">{{ data.counts.totalUnits }}</span>
         </div>
         <div class="p-4 bg-white rounded-2xl border border-emerald-200 shadow-xs">
-          <span class="text-[10px] font-bold text-slate-400 uppercase block">Commercial Sold</span>
+          <span class="text-[10px] font-bold text-slate-400 uppercase block">{{ $t('analytics.commercial_sold') }}</span>
           <span class="text-xl font-black text-emerald-600 mt-1 block">{{ data.counts.soldUnits }}</span>
         </div>
         <div class="p-4 bg-white rounded-2xl border border-amber-200 shadow-xs">
-          <span class="text-[10px] font-bold text-slate-400 uppercase block">Commercial Available</span>
+          <span class="text-[10px] font-bold text-slate-400 uppercase block">{{ $t('analytics.commercial_available') }}</span>
           <span class="text-xl font-black text-amber-600 mt-1 block">{{ data.counts.availableUnits }}</span>
         </div>
         <div class="p-4 bg-white rounded-2xl border border-blue-200 shadow-xs">
-          <span class="text-[10px] font-bold text-slate-400 uppercase block">Physically Occupied</span>
+          <span class="text-[10px] font-bold text-slate-400 uppercase block">{{ $t('analytics.physically_occupied') }}</span>
           <span class="text-xl font-black text-blue-600 mt-1 block">{{ data.counts.occupiedUnits }}</span>
         </div>
         <div class="p-4 bg-white rounded-2xl border border-teal-200 shadow-xs">
-          <span class="text-[10px] font-bold text-slate-400 uppercase block">Physically Vacant</span>
+          <span class="text-[10px] font-bold text-slate-400 uppercase block">{{ $t('analytics.physically_vacant') }}</span>
           <span class="text-xl font-black text-teal-600 mt-1 block">{{ data.counts.vacantUnits }}</span>
+        </div>
+      </div>
+
+      <!-- Inventory Distribution Chart -->
+      <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-5 flex flex-col">
+        <h3 class="text-sm font-bold text-slate-900 mb-4 pb-2 border-b border-slate-100 flex items-center justify-between">
+          <span class="flex items-center gap-2">
+            <i class="pi pi-chart-bar text-emerald-600"></i>
+            <span>{{ $t('dashboard.charts.units_by_property') }}</span>
+          </span>
+          <span class="text-[10px] text-slate-400 font-bold uppercase">{{ $t('analytics.commercial_status') }}</span>
+        </h3>
+        <div class="flex-1">
+          <BaseChart :options="inventoryChartOptions" :loading="loading" :height="320" />
         </div>
       </div>
 
       <!-- Inventory by Property -->
       <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-5">
         <h3 class="text-sm font-bold text-slate-900 mb-4 pb-2 border-b border-slate-100">
-          Inventory Status Breakdown by Property
+          {{ $t('analytics.inventory_breakdown') }}
         </h3>
         <div class="overflow-x-auto">
           <table class="w-full text-xs text-left">
             <thead class="bg-slate-50 text-slate-500 font-bold uppercase text-[10px]">
               <tr>
-                <th class="p-3">Property ID</th>
-                <th class="p-3 text-right">Total Units</th>
-                <th class="p-3 text-right">Sold Units</th>
-                <th class="p-3 text-right">Available Units</th>
-                <th class="p-3 text-right">Absorption Rate %</th>
+                <th class="p-3">{{ $t('analytics.property_id') }}</th>
+                <th class="p-3 text-right">{{ $t('analytics.units_count') }}</th>
+                <th class="p-3 text-right">{{ $t('dashboard.kpis.sold_units') }}</th>
+                <th class="p-3 text-right">{{ $t('dashboard.kpis.available_units') }}</th>
+                <th class="p-3 text-right">{{ $t('analytics.absorption_rate') }}</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-slate-100 font-medium">
@@ -88,23 +102,22 @@
         <div class="flex items-center justify-between mb-3 pb-2 border-b border-slate-100">
           <h4 class="text-xs font-bold text-amber-700 uppercase tracking-wider flex items-center gap-1.5">
             <i class="pi pi-flag"></i>
-            <span>Conflicting Operational Status Audit</span>
+            <span>{{ $t('analytics.conflicting_title') }}</span>
           </h4>
-          <span class="text-[10px] text-slate-400">Records where ISOCCUPIED and ISVACCANT conflict</span>
         </div>
         <div v-if="data.conflicting.length === 0" class="p-6 text-center text-xs text-slate-500">
           <i class="pi pi-check-circle text-emerald-600 text-lg block mb-1"></i>
-          <span>No conflicting occupancy flags detected. Commercial and physical statuses are aligned.</span>
+          <span>{{ $t('analytics.no_conflicting') }}</span>
         </div>
         <div v-else class="overflow-x-auto">
           <table class="w-full text-xs text-left">
             <thead class="bg-amber-50 text-amber-800 font-bold uppercase text-[10px]">
               <tr>
-                <th class="p-2">Unit ID</th>
-                <th class="p-2">Property</th>
-                <th class="p-2">Occupied Flag</th>
-                <th class="p-2">Vacant Flag</th>
-                <th class="p-2">Sales Status</th>
+                <th class="p-2">{{ $t('analytics.unit_id') }}</th>
+                <th class="p-2">{{ $t('analytics.property') }}</th>
+                <th class="p-2">{{ $t('units.occupied') }}</th>
+                <th class="p-2">{{ $t('units.vacant') }}</th>
+                <th class="p-2">{{ $t('units.sales_status') }}</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-slate-100 font-medium">
@@ -124,7 +137,11 @@
 </template>
 
 <script setup>
+import BaseChart from '~/components/charts/BaseChart.vue';
+
 const localePath = useLocalePath();
+const { t } = useI18n();
+
 const loading = ref(true);
 const data = ref(null);
 
@@ -142,5 +159,38 @@ async function loadInventory() {
 onMounted(() => {
   loadInventory();
 });
-</script>
 
+const inventoryChartOptions = computed(() => {
+  const pList = data.value?.byProperty || [];
+  return {
+    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+    legend: { bottom: '0', textStyle: { color: '#64748B', fontSize: 11 } },
+    grid: { left: '3%', right: '4%', bottom: '12%', containLabel: true },
+    xAxis: {
+      type: 'category',
+      data: pList.map(p => p.propertyId),
+      axisLabel: { color: '#64748B', fontSize: 10, rotate: 20 }
+    },
+    yAxis: {
+      type: 'value',
+      splitLine: { lineStyle: { color: '#F1F5F9' } }
+    },
+    series: [
+      {
+        name: t('dashboard.kpis.sold_units'),
+        type: 'bar',
+        stack: 'total',
+        itemStyle: { color: '#10B981', borderRadius: [0, 0, 0, 0] },
+        data: pList.map(p => p.sold)
+      },
+      {
+        name: t('dashboard.kpis.available_units'),
+        type: 'bar',
+        stack: 'total',
+        itemStyle: { color: '#F59E0B', borderRadius: [4, 4, 0, 0] },
+        data: pList.map(p => p.available)
+      }
+    ]
+  };
+});
+</script>
