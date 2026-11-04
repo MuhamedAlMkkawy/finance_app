@@ -1,7 +1,5 @@
-import { db } from '../../database';
-import { users } from '../../database/schema';
-import { eq } from 'drizzle-orm';
 import bcrypt from 'bcryptjs';
+import { DataStore } from '../../data/store';
 import { setUserSession } from '../../utils/auth';
 
 export default defineEventHandler(async (event) => {
@@ -12,7 +10,7 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 400, message: 'Email and password are required' });
   }
 
-  const user = await db.select().from(users).where(eq(users.email, String(email).trim().toLowerCase())).get();
+  const user = DataStore.findUserByEmail(String(email));
 
   if (!user || !bcrypt.compareSync(password, user.passwordHash)) {
     throw createError({ statusCode: 401, message: 'Invalid email or password' });
@@ -28,4 +26,3 @@ export default defineEventHandler(async (event) => {
   setUserSession(event, sessionUser);
   return { success: true, user: sessionUser };
 });
-

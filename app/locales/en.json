@@ -228,9 +228,9 @@
   "imports": {
     "title": "Excel Data Import & Quality",
     "subtitle": "Upload workbook, preview 92 columns, validate records, and manage batches",
-    "google_sheets_title": "Google Sheets Database Live Sync",
-    "google_sheets_subtitle": "Connect directly to Google Sheets to replace or synchronize the entire SQLite database",
-    "google_sheets_btn": "Sync Database from Google Sheet",
+    "google_sheets_title": "Google Sheets Live Sync",
+    "google_sheets_subtitle": "Connect directly to Google Sheets to synchronize and refresh the live portfolio dataset",
+    "google_sheets_btn": "Sync Data from Google Sheet",
     "google_sheets_notice": "Ensure the Google Sheet is shared with 'Anyone with the link can view' for instant syncing.",
     "upload_zone": "Drop your .xlsx file here or click to browse",
     "strategy": "Import Strategy",

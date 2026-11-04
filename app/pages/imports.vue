@@ -63,7 +63,7 @@
             <span class="text-[11px] font-bold text-slate-500">Strategy:</span>
             <label class="flex items-center gap-1 cursor-pointer">
               <input type="radio" value="replace" v-model="googleSheetStrategy" class="text-emerald-600" />
-              <span class="text-[11px] font-bold text-slate-700">Replace DB</span>
+              <span class="text-[11px] font-bold text-slate-700">Reload All</span>
             </label>
             <label class="flex items-center gap-1 cursor-pointer">
               <input type="radio" value="update" v-model="googleSheetStrategy" class="text-emerald-600" />
@@ -266,7 +266,7 @@
 </template>
 
 <script setup>
-const googleSheetUrl = ref('https://docs.google.com/spreadsheets/d/1oNYOxYolYO2SAK8kgu13IvYZIf8M8gyKv8QgaVw_Cq4/edit?gid=1892268511#gid=1892268511');
+const googleSheetUrl = ref('https://docs.google.com/spreadsheets/d/1ivMJljBPpppxg7wUpk83c6wBsbQCg3biP_mqjvAXw1w/edit?usp=drive_link');
 const googleSheetStrategy = ref('replace');
 const syncingSheet = ref(false);
 const sheetSyncMessage = ref('');

@@ -6,11 +6,6 @@ export default defineNuxtConfig({
   devtools: { enabled: false },
   serverDir: "server",
 
-  // runtimeConfig: {
-  //   public: {
-  //   },
-  // },
-
   ssr: true,
 
   app: {
@@ -42,8 +37,6 @@ export default defineNuxtConfig({
     "@nuxtjs/tailwindcss",
     "@pinia/nuxt",
     "pinia-plugin-persistedstate/nuxt",
-    // "@vee-validate/nuxt",
-    // "nuxt-yup",
   ],
 
   veeValidate: {
@@ -54,8 +47,6 @@ export default defineNuxtConfig({
       ErrorMessage: "VeeErrorMessage",
     },
   },
-
-  // components: true,
 
   imports: {
     dirs: ["stores", "composables", "helpers", "schemas"],
@@ -70,7 +61,6 @@ export default defineNuxtConfig({
   primevue: {
     autoImport: true,
     options: {
-      // unstyled: true,
       zIndex: {
         modal: 3000,
       },
@@ -125,10 +115,8 @@ export default defineNuxtConfig({
 
   nitro: {
     externals: {
-      inline: ['xlsx'],
-      external: ['better-sqlite3']
+      inline: ['xlsx']
     },
-
     serverAssets: [
       {
         baseName: 'excel-data',

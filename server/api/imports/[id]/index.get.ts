@@ -1,26 +1,20 @@
-import { db } from '../../../database';
-import { importBatches, importIssues } from '../../../database/schema';
-import { eq, sql } from 'drizzle-orm';
+import { DataStore } from '../../../data/store';
 
 export default defineEventHandler(async (event) => {
+  await DataStore.ensureInitialized();
   const id = Number(getRouterParam(event, 'id'));
   if (isNaN(id)) {
     throw createError({ statusCode: 400, message: 'Invalid Batch ID' });
   }
 
-  const batch = await db.select().from(importBatches).where(eq(importBatches.id, id)).get();
+  const batch = DataStore.getBatchById(id);
   if (!batch) {
     throw createError({ statusCode: 404, message: 'Import batch not found' });
   }
 
-  const issuesCount = await db.select({ count: sql<number>`count(*)` })
-    .from(importIssues)
-    .where(eq(importIssues.importBatchId, id))
-    .get();
-
+  const issues = DataStore.getBatchIssues(id);
   return {
     ...batch,
-    issuesCount: issuesCount?.count || 0
+    issuesCount: issues.length
   };
 });
-

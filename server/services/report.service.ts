@@ -1,8 +1,6 @@
 import ExcelJS from 'exceljs';
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
-import { db } from '../database';
-import { units, properties, importIssues } from '../database/schema';
 import { DashboardService } from './dashboard.service';
 import { PropertyService } from './property.service';
 import { AnalyticsService } from './analytics.service';

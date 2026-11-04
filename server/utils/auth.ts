@@ -1,7 +1,4 @@
 import type { H3Event } from 'h3';
-import { db } from '../database';
-import { users } from '../database/schema';
-import { eq } from 'drizzle-orm';
 
 const AUTH_COOKIE = 'auth_session';
 

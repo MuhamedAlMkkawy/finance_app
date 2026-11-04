@@ -1,7 +1,4 @@
-import { db } from '../database';
-import { units } from '../database/schema';
-import { eq, sql, and, gte, lte, desc, asc } from 'drizzle-orm';
-import { DashboardService } from './dashboard.service';
+import { DataStore } from '../data/store';
 import type { GlobalFilterParams } from '../../shared/types';
 import { EXPECTED_92_COLUMNS } from './validation.service';
 
@@ -18,100 +15,20 @@ export class UnitService {
    * Get paginated and filtered units
    */
   static async getUnits(query: UnitListQuery) {
-    const page = Math.max(1, Number(query.page) || 1);
-    const pageSize = Math.min(100, Math.max(10, Number(query.pageSize) || 20));
-    const offset = (page - 1) * pageSize;
-
-    const where = DashboardService.buildFilterConditions(query);
-
-    // Dynamic sort
-    const sortBy = query.sortBy || 'id';
-    const sortOrder = query.sortOrder === 'desc' ? desc : asc;
-
-    let sortCol: any = units.id;
-    if (sortBy === 'propertyId') sortCol = units.propertyId;
-    else if (sortBy === 'unitId') sortCol = units.unitId;
-    else if (sortBy === 'unitName') sortCol = units.unitName;
-    else if (sortBy === 'unitArea') sortCol = units.unitArea;
-    else if (sortBy === 'saleAmount') sortCol = units.saleAmount;
-    else if (sortBy === 'salesUnitStatus') sortCol = units.salesUnitStatus;
-    else if (sortBy === 'blockId') sortCol = units.blockId;
-    else if (sortBy === 'floorId') sortCol = units.floorId;
-
-    const totalCountRes = await db.select({ count: sql<number>`count(*)` })
-      .from(units)
-      .where(where)
-      .get();
-    const total = totalCountRes?.count || 0;
-
-    const records = await db.select()
-      .from(units)
-      .where(where)
-      .orderBy(sortOrder(sortCol))
-      .limit(pageSize)
-      .offset(offset)
-      .all();
-
-    // Map units and optionally parse rawData
-    const items = records.map(r => {
-      let raw: any = {};
-      try {
-        raw = JSON.parse(r.rawData);
-      } catch (e) {}
-
-      return {
-        id: r.id,
-        propertyId: r.propertyId,
-        originalPropertyId: r.originalPropertyId,
-        unitId: r.unitId,
-        unitName: r.unitName,
-        blockId: r.blockId,
-        floorId: r.floorId,
-        unitType: r.unitType,
-        unitArea: r.unitArea,
-        salesUnitStatus: r.salesUnitStatus,
-        revenueType: r.revenueType,
-        saleAmount: r.saleAmount,
-        saleTaxAmount: r.saleTaxAmount,
-        totalAmount: r.totalAmount,
-        currencyCode: r.currencyCode,
-        occupied: r.occupied === 1,
-        reserved: r.reserved === 1,
-        vacant: r.vacant === 1,
-        sourceRowNumber: r.sourceRowNumber,
-        importBatchId: r.importBatchId,
-        raw
-      };
-    });
-
-    return {
-      items,
-      total,
-      page,
-      pageSize,
-      totalPages: Math.ceil(total / pageSize)
-    };
+    await DataStore.ensureInitialized();
+    return DataStore.getUnitsList(query);
   }
 
   /**
-   * Get single unit with categorized details
+   * Get single unit with categorized details into 8 clear categories
    */
   static async getUnitById(idOrUnitId: string | number) {
-    let unit = null;
-    if (!isNaN(Number(idOrUnitId))) {
-      unit = await db.select().from(units).where(eq(units.id, Number(idOrUnitId))).get();
-    }
-    if (!unit) {
-      unit = await db.select().from(units).where(eq(units.unitId, String(idOrUnitId))).get();
-    }
+    await DataStore.ensureInitialized();
+    const unit = DataStore.getUnitById(idOrUnitId);
     if (!unit) return null;
 
-    let raw: Record<string, any> = {};
-    try {
-      raw = JSON.parse(unit.rawData || '{}');
-    } catch (e) {}
+    const raw = unit.raw || {};
 
-    // Grouping all fields into 8 clear categories as requested
     const categorized = {
       general: {
         propertyId: unit.propertyId,
@@ -257,4 +174,3 @@ export class UnitService {
     }));
   }
 }
-

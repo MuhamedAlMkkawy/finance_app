@@ -1,7 +1,5 @@
-import { db } from '../../database';
-import { users } from '../../database/schema';
-import { eq } from 'drizzle-orm';
 import bcrypt from 'bcryptjs';
+import { DataStore } from '../../data/store';
 import { setUserSession } from '../../utils/auth';
 
 export default defineEventHandler(async (event) => {
@@ -13,18 +11,18 @@ export default defineEventHandler(async (event) => {
   }
 
   const cleanEmail = String(email).trim().toLowerCase();
-  const existing = await db.select().from(users).where(eq(users.email, cleanEmail)).get();
+  const existing = DataStore.findUserByEmail(cleanEmail);
   if (existing) {
     throw createError({ statusCode: 409, message: 'User with this email already exists' });
   }
 
   const passwordHash = bcrypt.hashSync(password, 10);
-  const [newUser] = await db.insert(users).values({
-    name: name || cleanEmail.split('@')[0],
-    email: cleanEmail,
+  const newUser = DataStore.createUser(
+    name || cleanEmail.split('@')[0],
+    cleanEmail,
     passwordHash,
-    role: 'manager'
-  }).returning();
+    'manager'
+  );
 
   const sessionUser = {
     id: newUser.id,
@@ -36,4 +34,3 @@ export default defineEventHandler(async (event) => {
   setUserSession(event, sessionUser);
   return { success: true, user: sessionUser };
 });
-

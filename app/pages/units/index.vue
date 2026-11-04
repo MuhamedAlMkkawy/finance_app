@@ -140,7 +140,7 @@
             <tr v-if="loading">
               <td :colspan="activeColumnsMeta.length + 2" class="p-12 text-center text-slate-400">
                 <i class="pi pi-spin pi-spinner text-2xl text-emerald-600 block mb-2"></i>
-                <span>Loading units from SQLite database...</span>
+                <span>Loading units from Google Sheet...</span>
               </td>
             </tr>
 

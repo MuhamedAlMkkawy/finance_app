@@ -1,8 +1,7 @@
-import { db } from '../../../database';
-import { importIssues } from '../../../database/schema';
-import { eq, desc } from 'drizzle-orm';
+import { DataStore } from '../../../data/store';
 
 export default defineEventHandler(async (event) => {
+  await DataStore.ensureInitialized();
   const id = Number(getRouterParam(event, 'id'));
   const query = getQuery(event);
   const limit = Math.min(200, Number(query.limit) || 100);
@@ -11,13 +10,6 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 400, message: 'Invalid Batch ID' });
   }
 
-  const issues = await db.select()
-    .from(importIssues)
-    .where(eq(importIssues.importBatchId, id))
-    .orderBy(desc(importIssues.id))
-    .limit(limit)
-    .all();
-
-  return issues;
+  const issues = DataStore.getBatchIssues(id);
+  return [...issues].reverse().slice(0, limit);
 });
-
