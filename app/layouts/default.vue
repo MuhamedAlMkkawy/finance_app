@@ -182,7 +182,7 @@ const navItems = [
   { to: '/properties', label: 'nav.properties', icon: 'pi pi-building' },
   { to: '/units', label: 'nav.units', icon: 'pi pi-list', badge: '1,034' },
   { to: '/data-explorer', label: 'nav.data_explorer', icon: 'pi pi-database' },
-  { to: '/imports', label: 'nav.imports', icon: 'pi pi-cloud-upload' },
+  // { to: '/imports', label: 'nav.imports', icon: 'pi pi-cloud-upload' },
   { to: '/reports', label: 'nav.reports', icon: 'pi pi-file-pdf' },
 ]
 
